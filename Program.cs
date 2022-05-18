@@ -1,6 +1,9 @@
 ﻿//Created by Alexander Fields http://alexanderfields.me
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace StarportDefendPlanetAlgo
 {
@@ -9,86 +12,98 @@ namespace StarportDefendPlanetAlgo
         private static void Main(string[] args)
         {
             string planetMapPath = Directory.GetCurrentDirectory() + "/PlanetMap.json";
+            string planetMapDefendedPath = Directory.GetCurrentDirectory() + "/PlanetMapDefended.json";
 
-            string jsonText = File.ReadAllText(planetMapPath);
+            int[,] mapGrid = new int[25, 25];
 
-            int[,] testGrid = new int[25, 25];
             /*
-            testGrid[12, 12] = 5;
+            mapGrid[12, 12] = 5;
             for (int i = 0; i < 6; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    testGrid[10 + i, 19 + j] = 1;
+                    mapGrid[10 + i, 19 + j] = 1;
                 }
             }
 
-            testGrid[10, 19] = 2;
-            testGrid[11, 19] = 2;
-            testGrid[10, 20] = 2;
-            testGrid[11, 20] = 2;
+            mapGrid[10, 19] = 2;
+            mapGrid[11, 19] = 2;
+            mapGrid[10, 20] = 2;
+            mapGrid[11, 20] = 2;
 
-            testGrid[13, 13] = 1;
-            testGrid[14, 14] = 1;
-            testGrid[15, 15] = 1;
-            testGrid[15, 16] = 1;
-            testGrid[15, 17] = 1;
-            testGrid[16, 17] = 1;
-            testGrid[15, 18] = 1;
-*/
+            mapGrid[13, 13] = 1;
+            mapGrid[14, 14] = 1;
+            mapGrid[15, 15] = 1;
+            mapGrid[15, 16] = 1;
+            mapGrid[15, 17] = 1;
+            mapGrid[16, 17] = 1;
+            mapGrid[15, 18] = 1;
+            */
             Random rnd = new Random();
 
             //for randomized map
-            for (int i = 1; i < testGrid.GetLength(0) - 1; i++)
+            for (int i = 1; i < mapGrid.GetLength(0) - 1; i++)
             {
-                for (int j = 1; j < testGrid.GetLength(1) - 1; j++)
+                for (int j = 1; j < mapGrid.GetLength(1) - 1; j++)
                 {
                     int random = rnd.Next(1, 5);
                     if (random > 1)
                     {
-                        testGrid[i, j] = 1;
+                        mapGrid[i, j] = 1;
                     }
                 }
             }
 
             int biodomeX = rnd.Next(1, 24);
             int biodomeY = rnd.Next(1, 24);
-            testGrid[biodomeX, biodomeY] = 2;
-            testGrid[biodomeX, biodomeY + 1] = 2;
-            testGrid[biodomeX + 1, biodomeY] = 2;
-            testGrid[biodomeX + 1, biodomeY + 1] = 2;
+            mapGrid[biodomeX, biodomeY] = 2;
+            mapGrid[biodomeX, biodomeY + 1] = 2;
+            mapGrid[biodomeX + 1, biodomeY] = 2;
+            mapGrid[biodomeX + 1, biodomeY + 1] = 2;
 
-            testGrid[rnd.Next(1, 25), rnd.Next(1, 25)] = 5;
+            mapGrid[rnd.Next(1, 25), rnd.Next(1, 25)] = 5;
+            /*
+            int count = 0;
+            List<int[]> mapGridList = mapGrid.Cast<int>()
+                    .GroupBy(x => count++ / mapGrid.GetLength(1))
+                    .Select(g => g.ToArray())
+                    .ToList();
+            */
 
-            Console.WriteLine("PlanetMap Serialized!");
+            string jsonBefore = JsonConvert.SerializeObject(mapGrid);
+            File.WriteAllText(planetMapPath, jsonBefore);
+            Console.WriteLine("Undefended Random Map Serialized!");
+
+            string file = File.ReadAllText(planetMapPath);
+            Console.WriteLine("Map Read!");
 
             System.Diagnostics.Debug.WriteLine("Before");
 
-            for (int i = 0; i < testGrid.GetLength(0); i++)
+            for (int i = 0; i < mapGrid.GetLength(0); i++)
             {
-                for (int j = 0; j < testGrid.GetLength(1); j++)
+                for (int j = 0; j < mapGrid.GetLength(1); j++)
                 {
                     char letter = ' ';
-                    if (testGrid[i, j] == 0)
+                    if (mapGrid[i, j] == 0)
                     {
                         letter = 'W';
                     }
-                    else if (testGrid[i, j] == 1)
+                    else if (mapGrid[i, j] == 1)
                     {
                     }
-                    else if (testGrid[i, j] == 2)
+                    else if (mapGrid[i, j] == 2)
                     {
                         letter = 'B';
                     }
-                    else if (testGrid[i, j] == 3)
+                    else if (mapGrid[i, j] == 3)
                     {
                         letter = 'C';
                     }
-                    else if (testGrid[i, j] == 4)
+                    else if (mapGrid[i, j] == 4)
                     {
                         letter = 'L';
                     }
-                    else if (testGrid[i, j] == 5)
+                    else if (mapGrid[i, j] == 5)
                     {
                         letter = 'E';
                     }
@@ -97,34 +112,38 @@ namespace StarportDefendPlanetAlgo
                 System.Diagnostics.Debug.WriteLine("");
             }
 
-            DefensePlan defensePlan = new DefensePlan(testGrid);
-            testGrid = defensePlan.CreateDefensePlan();
+            DefensePlan defensePlan = new DefensePlan(mapGrid);
+            mapGrid = defensePlan.CreateDefensePlan();
 
-            for (int i = 0; i < testGrid.GetLength(0); i++)
+            string jsonAfter = JsonConvert.SerializeObject(mapGrid);
+            File.WriteAllText(planetMapDefendedPath, jsonAfter);
+            Console.WriteLine("Defended Planet Map Serialized!");
+
+            for (int i = 0; i < mapGrid.GetLength(0); i++)
             {
-                for (int j = 0; j < testGrid.GetLength(1); j++)
+                for (int j = 0; j < mapGrid.GetLength(1); j++)
                 {
                     char letter = ' ';
-                    if (testGrid[i, j] == 0)
+                    if (mapGrid[i, j] == 0)
                     {
                         letter = 'W';
                     }
-                    else if (testGrid[i, j] == 1)
+                    else if (mapGrid[i, j] == 1)
                     {
                     }
-                    else if (testGrid[i, j] == 2)
+                    else if (mapGrid[i, j] == 2)
                     {
                         letter = 'B';
                     }
-                    else if (testGrid[i, j] == 3)
+                    else if (mapGrid[i, j] == 3)
                     {
                         letter = 'C';
                     }
-                    else if (testGrid[i, j] == 4)
+                    else if (mapGrid[i, j] == 4)
                     {
                         letter = 'L';
                     }
-                    else if (testGrid[i, j] == 5)
+                    else if (mapGrid[i, j] == 5)
                     {
                         letter = 'E';
                     }

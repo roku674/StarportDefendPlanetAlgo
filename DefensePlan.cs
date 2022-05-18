@@ -49,8 +49,12 @@ namespace StarportDefendPlanetAlgo
             //get distance to exit
             for (int i = 0; i < biodomeAndExit.Length - 1; i++)
             {
-                int manhattan = ManhattanDist((int)biodomeAndExit[i].x, (int)biodomeAndExit[i].y,
+                int manhattan = shortestDist;
+                if (i != 4)
+                {
+                    manhattan = ManhattanDist((int)biodomeAndExit[i].x, (int)biodomeAndExit[i].y,
                               (int)biodomeAndExit[4].x, (int)biodomeAndExit[4].y);
+                }
 
                 if (manhattan < shortestDist)
                 {
@@ -242,6 +246,14 @@ namespace StarportDefendPlanetAlgo
                         biodomeAndExit[4].x = i;
                         biodomeAndExit[4].y = j;
                     }
+                }
+            }
+
+            if (biodomeCount == 4)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    biodomeAndExit[5 + i] = biodomeAndExit[0 + i];
                 }
             }
 
