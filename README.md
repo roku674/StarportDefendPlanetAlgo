@@ -10,3 +10,4 @@
  3 - mine/compound mine
  4 - cannon
  5 - exit
+ 6 - unusable spot ( generally near entrance)
