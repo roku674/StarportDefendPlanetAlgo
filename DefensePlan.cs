@@ -65,7 +65,9 @@ namespace StarportDefendPlanetAlgo
             }
 
             List<coordinate> coordinates = BFS(new List<coordinate>(), planetGrid, new bool[planetGrid.GetLength(0), planetGrid.GetLength(1)], (int)biodomeEdge.x, (int)biodomeEdge.y);
+
             bool passedExit = false;
+
             for (int i = 0; i < coordinates.Count; i++)
             {
                 if (planetGrid[coordinates[i].x, coordinates[i].y] == 5)
