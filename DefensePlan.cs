@@ -65,66 +65,71 @@ namespace StarportDefendPlanetAlgo
             }
 
             List<coordinate> coordinates = BFS(new List<coordinate>(), planetGrid, new bool[planetGrid.GetLength(0), planetGrid.GetLength(1)], (int)biodomeEdge.x, (int)biodomeEdge.y);
-
+            bool passedExit = false;
             for (int i = 0; i < coordinates.Count; i++)
             {
-                //System.Diagnostics.Debug.WriteLine("(" + coordinates[i].x + " , " + coordinates[i].y + "): " + planetGrid[coordinates[i].x, coordinates[i].y] + " ");
-                if (planetGrid[coordinates[i].x, coordinates[i].y] == 1)
+                if (planetGrid[coordinates[i].x, coordinates[i].y] == 5)
                 {
-                    if (currentDefenses < maxDefenses)
+                    passedExit = true;
+                    System.Diagnostics.Debug.WriteLine("Passed Exit");
+                }
+                //System.Diagnostics.Debug.WriteLine("(" + coordinates[i].x + " , " + coordinates[i].y + "): " + planetGrid[coordinates[i].x, coordinates[i].y] + " ");
+                if (planetGrid[coordinates[i].x, coordinates[i].y] == 1 && currentDefenses < maxDefenses)
+                {
+                    if (!passedExit && (
+                        (planetGrid[coordinates[i].x - 1, coordinates[i].y] == 0 && planetGrid[coordinates[i].x + 1, coordinates[i].y] == 0 &&
+                        planetGrid[coordinates[i].x, coordinates[i].y - 1] != 0 && planetGrid[coordinates[i].x, coordinates[i].y + 1] != 0) ||
+                        (planetGrid[coordinates[i].x - 1, coordinates[i].y] != 0 && planetGrid[coordinates[i].x + 1, coordinates[i].y] != 0 &&
+                        planetGrid[coordinates[i].x, coordinates[i].y - 1] == 0 && planetGrid[coordinates[i].x, coordinates[i].y + 1] == 0))
+                    )
                     {
-                        if (
-                            (planetGrid[coordinates[i].x - 1, coordinates[i].y] == 0 && planetGrid[coordinates[i].x + 1, coordinates[i].y] == 0 &&
-                            planetGrid[coordinates[i].x, coordinates[i].y - 1] != 0 && planetGrid[coordinates[i].x, coordinates[i].y + 1] != 0) ||
-                            (planetGrid[coordinates[i].x - 1, coordinates[i].y] != 0 && planetGrid[coordinates[i].x + 1, coordinates[i].y] != 0 &&
-                            planetGrid[coordinates[i].x, coordinates[i].y - 1] == 0 && planetGrid[coordinates[i].x, coordinates[i].y + 1] == 0)
-                        )
+                        planetGrid[coordinates[i].x, coordinates[i].y] = 3;
+                        currentDefenses++;
+                    }
+                    else
+                    {
+                        planetGrid[coordinates[i].x, coordinates[i].y] = 4;
+                        currentDefenses++;
+                    }
+
+                    uint walls = 0;
+                    //check all wals nearby
+                    if (planetGrid[coordinates[i].x - 1, coordinates[i].y] == 0) { walls++; }
+                    if (planetGrid[coordinates[i].x, coordinates[i].y - 1] == 0) { walls++; }
+                    if (planetGrid[coordinates[i].x - 1, coordinates[i].y - 1] == 0) { walls++; }
+                    if (planetGrid[coordinates[i].x + 1, coordinates[i].y] == 0) { walls++; }
+                    if (planetGrid[coordinates[i].x, coordinates[i].y + 1] == 0) { walls++; }
+                    if (planetGrid[coordinates[i].x + 1, coordinates[i].y + 1] == 0) { walls++; }
+                    if (planetGrid[coordinates[i].x + 1, coordinates[i].y - 1] == 0) { walls++; }
+                    if (planetGrid[coordinates[i].x - 1, coordinates[i].y + 1] == 0) { walls++; }
+
+                    if (walls >= 6 && !passedExit)
+                    {
+                        planetGrid[coordinates[i].x, coordinates[i].y] = 3;
+                        currentDefenses++;
+                    }
+
+                    for (int j = 0; j < 5; j++)
+                    {
+                        //if position in list has a biodome cmine near
+                        if (i + j < coordinates.Count && planetGrid[coordinates[i + j].x, coordinates[i + j].y] == 2)
                         {
                             planetGrid[coordinates[i].x, coordinates[i].y] = 3;
                             currentDefenses++;
                         }
-                        else
-                        {
-                            planetGrid[coordinates[i].x, coordinates[i].y] = 4;
-                            currentDefenses++;
-                        }
-
-                        uint walls = 0;
-                        //check all wals nearby
-                        if (planetGrid[coordinates[i].x - 1, coordinates[i].y] == 0) { walls++; }
-                        if (planetGrid[coordinates[i].x, coordinates[i].y - 1] == 0) { walls++; }
-                        if (planetGrid[coordinates[i].x - 1, coordinates[i].y - 1] == 0) { walls++; }
-                        if (planetGrid[coordinates[i].x + 1, coordinates[i].y] == 0) { walls++; }
-                        if (planetGrid[coordinates[i].x, coordinates[i].y + 1] == 0) { walls++; }
-                        if (planetGrid[coordinates[i].x + 1, coordinates[i].y + 1] == 0) { walls++; }
-                        if (planetGrid[coordinates[i].x + 1, coordinates[i].y - 1] == 0) { walls++; }
-                        if (planetGrid[coordinates[i].x - 1, coordinates[i].y + 1] == 0) { walls++; }
-
-                        if (walls >= 6)
+                        if (i - j > 0 && planetGrid[coordinates[i - j].x, coordinates[i - j].y] == 2)
                         {
                             planetGrid[coordinates[i].x, coordinates[i].y] = 3;
                             currentDefenses++;
-                        }
-
-                        for (int j = 0; j < 5; j++)
-                        {
-                            //if position in list has a biodome cmine near
-                            if (i + j < coordinates.Count && planetGrid[coordinates[i + j].x, coordinates[i + j].y] == 2)
-                            {
-                                planetGrid[coordinates[i].x, coordinates[i].y] = 3;
-                                currentDefenses++;
-                            }
-                            if (i - j > 0 && planetGrid[coordinates[i - j].x, coordinates[i - j].y] == 2)
-                            {
-                                planetGrid[coordinates[i].x, coordinates[i].y] = 3;
-                                currentDefenses++;
-                            }
                         }
                     }
                 }
-                else if (planetGrid[coordinates[i].x, coordinates[i].y] == 5)
+                else if (planetGrid[coordinates[i].x, coordinates[i].y] == 5 && currentDefenses == maxDefenses)
                 {
-                    //System.Diagnostics.Debug.WriteLine("Break out of Algo exit found");
+                    break;
+                }
+                else if (currentDefenses == maxDefenses)
+                {
                     break;
                 }
             }
