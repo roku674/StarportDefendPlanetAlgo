@@ -5,7 +5,6 @@ C:\Users\ZANDER\source\repos\StarportDefendPlanetAlgo\StarportDefendPlanetAlgo\b
 C:\Users\ZANDER\source\repos\StarportDefendPlanetAlgo\StarportDefendPlanetAlgo\bin\Release\netcoreapp3.1\StarportDefendPlanetAlgo.dll
 C:\Users\ZANDER\source\repos\StarportDefendPlanetAlgo\StarportDefendPlanetAlgo\bin\Release\netcoreapp3.1\StarportDefendPlanetAlgo.pdb
 C:\Users\ZANDER\source\repos\StarportDefendPlanetAlgo\StarportDefendPlanetAlgo\bin\Release\netcoreapp3.1\Newtonsoft.Json.dll
-C:\Users\ZANDER\source\repos\StarportDefendPlanetAlgo\StarportDefendPlanetAlgo\obj\Release\netcoreapp3.1\StarportDefendPlanetAlgo.csproj.AssemblyReference.cache
 C:\Users\ZANDER\source\repos\StarportDefendPlanetAlgo\StarportDefendPlanetAlgo\obj\Release\netcoreapp3.1\StarportDefendPlanetAlgo.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\ZANDER\source\repos\StarportDefendPlanetAlgo\StarportDefendPlanetAlgo\obj\Release\netcoreapp3.1\StarportDefendPlanetAlgo.AssemblyInfoInputs.cache
 C:\Users\ZANDER\source\repos\StarportDefendPlanetAlgo\StarportDefendPlanetAlgo\obj\Release\netcoreapp3.1\StarportDefendPlanetAlgo.AssemblyInfo.cs
