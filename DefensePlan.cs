@@ -73,16 +73,21 @@ namespace StarportDefendPlanetAlgo
                 if (planetGrid[coordinates[i].x, coordinates[i].y] == 5)
                 {
                     passedExit = true;
-                    System.Diagnostics.Debug.WriteLine("Passed Exit");
+                    System.Diagnostics.Debug.WriteLine("Passed Exit " + passedExit);
                 }
                 //System.Diagnostics.Debug.WriteLine("(" + coordinates[i].x + " , " + coordinates[i].y + "): " + planetGrid[coordinates[i].x, coordinates[i].y] + " ");
-                if (planetGrid[coordinates[i].x, coordinates[i].y] == 1 && currentDefenses < maxDefenses)
+                if (planetGrid[coordinates[i].x, coordinates[i].y] == 1 && currentDefenses < maxDefenses && !passedExit)
                 {
-                    if (!passedExit && (
+                    //if left is wall && right is wall && up is not a wall && down is not a wall
+                    //or
+                    //if left is not a wall && right is not a wall && up is a wall && down is a wall
+                    if ((
                         (planetGrid[coordinates[i].x - 1, coordinates[i].y] == 0 && planetGrid[coordinates[i].x + 1, coordinates[i].y] == 0 &&
-                        planetGrid[coordinates[i].x, coordinates[i].y - 1] != 0 && planetGrid[coordinates[i].x, coordinates[i].y + 1] != 0) ||
+                        planetGrid[coordinates[i].x, coordinates[i].y - 1] != 0 && planetGrid[coordinates[i].x, coordinates[i].y + 1] != 0)
+                        ||
                         (planetGrid[coordinates[i].x - 1, coordinates[i].y] != 0 && planetGrid[coordinates[i].x + 1, coordinates[i].y] != 0 &&
-                        planetGrid[coordinates[i].x, coordinates[i].y - 1] == 0 && planetGrid[coordinates[i].x, coordinates[i].y + 1] == 0))
+                        planetGrid[coordinates[i].x, coordinates[i].y - 1] == 0 && planetGrid[coordinates[i].x, coordinates[i].y + 1] == 0)
+                        )
                     )
                     {
                         planetGrid[coordinates[i].x, coordinates[i].y] = 3;
@@ -105,7 +110,7 @@ namespace StarportDefendPlanetAlgo
                     if (planetGrid[coordinates[i].x + 1, coordinates[i].y - 1] == 0) { walls++; }
                     if (planetGrid[coordinates[i].x - 1, coordinates[i].y + 1] == 0) { walls++; }
 
-                    if (walls >= 6 && !passedExit)
+                    if (walls == 6)
                     {
                         planetGrid[coordinates[i].x, coordinates[i].y] = 3;
                         currentDefenses++;
@@ -125,6 +130,11 @@ namespace StarportDefendPlanetAlgo
                             currentDefenses++;
                         }
                     }
+                }
+                else if (planetGrid[coordinates[i].x, coordinates[i].y] == 1 && currentDefenses < maxDefenses && passedExit)
+                {
+                    planetGrid[coordinates[i].x, coordinates[i].y] = 4;
+                    currentDefenses++;
                 }
                 else if (planetGrid[coordinates[i].x, coordinates[i].y] == 5 && currentDefenses == maxDefenses)
                 {
