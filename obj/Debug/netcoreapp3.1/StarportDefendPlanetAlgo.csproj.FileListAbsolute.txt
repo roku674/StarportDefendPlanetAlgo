@@ -13,3 +13,4 @@ C:\Users\ZANDER\source\repos\StarportDefendPlanetAlgo\StarportDefendPlanetAlgo\o
 C:\Users\ZANDER\source\repos\StarportDefendPlanetAlgo\StarportDefendPlanetAlgo\obj\Debug\netcoreapp3.1\StarportDefendPlanetAlgo.genruntimeconfig.cache
 C:\Users\ZANDER\source\repos\StarportDefendPlanetAlgo\StarportDefendPlanetAlgo\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 C:\Users\ZANDER\source\repos\StarportDefendPlanetAlgo\StarportDefendPlanetAlgo\obj\Debug\netcoreapp3.1\StarportDefendPlanetAlgo.csproj.CopyComplete
+C:\Users\ZANDER\source\repos\StarportDefendPlanetAlgo\StarportDefendPlanetAlgo\obj\Debug\netcoreapp3.1\StarportDefendPlanetAlgo.csproj.AssemblyReference.cache
